@@ -56,7 +56,7 @@ const Spotify = {
   },
 
   // Gets a user's ID from Spotify, creates a new playlist on user's account, and adds tracks to that playlist
-  savePlayList(name, trackUris) {
+  savePlaylist(name, trackUris) {
     if (!name || !trackUris.length) {
       return;
     }
