@@ -9,13 +9,9 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      searchResults: [{name: 'name1', artist: 'artist1', album: 'album1', id: 1}
-      , {name: 'name2', artist: 'artist2', album: 'album2', id: 2}
-      , {name: 'name3', artist: 'artist3', album: 'album3', id: 3}],
-      playlistName: '',
-      playlistTracks: [{name: 'playlistName1', artist: 'playlistArtist1', album: 'playlistAlbum1', id: 4}
-    , {name: 'playlistName2', artist: 'playlistArtist2', album: 'playlistAlbum2', id: 5}
-    , {name: 'playlistName3', artist: 'playlistArtist3', album: 'playlistAlbum3', id: 6}]
+      searchResults: [],
+      playlistName: 'My Playlist',
+      playlistTracks: []
     }
 
     this.addTrack = this.addTrack.bind(this);
@@ -25,6 +21,7 @@ class App extends React.Component {
     this.search = this.search.bind(this);
   }
 
+  // Adds track from Search Results to Playlist
   addTrack(track) {
     let tracks = this.state.playlistTracks;
     if (tracks.find(savedTrack => savedTrack.id === track.id)) {
@@ -34,6 +31,7 @@ class App extends React.Component {
     this.setState({ playlistTracks: tracks })
   }
 
+  // Removes track from Playlist by filtering out track id from playlistTracks
   removeTrack(track) {
     let tracks = this.state.playlistTracks;
     tracks = tracks.filter(currentTrack => currentTrack.id !== track.id);
@@ -41,24 +39,27 @@ class App extends React.Component {
     this.setState({ playlistTracks: tracks });
   }
 
+  // Updates the name of the Playlist
   updatePlaylistName(name) {
     this.setState({ playlistName: name });
   }
 
+  // Saves Playlist name and tracks to user's account
   savePlaylist() {
     const trackURIs = this.state.playlistTracks.map(track => track.uri);
     Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() => {
       this.setState({
         playlistName: 'New Playlist',
         playlistTracks: []
-      })
-    })
+      });
+    });
   }
 
+  // Sends search term request to spotify and returns results of search in the search results panel
   search(term) {
     Spotify.search(term).then(searchResults => {
       this.setState({ searchResults: searchResults })
-    })
+    });
   }
 
   render() {
